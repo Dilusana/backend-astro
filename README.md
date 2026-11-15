@@ -37,9 +37,9 @@ Open the URL Vite prints, usually `http://localhost:5173`. Vite proxies `/api` t
 
 ## Deploy the frontend and API
 
-The frontend can be deployed to Vercel and the FastAPI backend to Render. In the Vercel project settings, add the environment variable `VITE_API_BASE_URL` with the backend's public Render URL (for example, `https://your-service.onrender.com`, without a trailing slash), then redeploy the frontend. The frontend will send its `/api/...` requests to that backend. Do not put backend API keys in a `VITE_` variable; Vite exposes those values to browsers.
+The frontend can be deployed to Vercel and the FastAPI backend to Render. `vercel.json` rewrites `/api/...` requests to the Render API at `https://backend-astrolen.onrender.com`, so no Vercel environment variable is needed. The backend also allows the production Vercel domain in its CORS configuration. For local direct API requests, copy `.env.example` to `.env`; do not put backend API keys in a `VITE_` variable because Vite exposes those values to browsers.
 
-The backend must be running before the frontend can use it. The attached Render log shows startup failing with `ModuleNotFoundError: No module named 'astropy'`; add the missing dependency to the backend's `requirements.txt` and redeploy Render. Also configure the backend's CORS allowlist to include the deployed Vercel domain, then verify the Render service's `/docs` endpoint loads.
+The backend must be running before the frontend can use it. The Render build command installs the repository-root `requirements.txt`; include `astropy` there (the FITS and comparison services import it) and verify that `https://backend-astrolen.onrender.com/api/health` returns `{"status":"ok","archive":"IRSA SPHEREx"}` after deployment.
 
 ## Other scripts
 
