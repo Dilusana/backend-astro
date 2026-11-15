@@ -1,9 +1,11 @@
+import { apiUrl } from './apiUrl'
+
 export async function fetchSpherexObservations({ raDeg, decDeg }, signal) {
   const params = new URLSearchParams({
     ra: String(raDeg),
     dec: String(decDeg),
   })
-  const response = await fetch(`/api/spherex/observations?${params}`, { signal })
+  const response = await fetch(apiUrl(`/api/spherex/observations?${params}`), { signal })
   let body = null
   try {
     body = await response.json()
@@ -29,7 +31,7 @@ export async function fetchSpherexCompare({ fitsUrl1, fitsUrl2, ra, dec, sizeDeg
     size_deg: String(sizeDeg),
     interpolation: String(interpolation),
   })
-  const response = await fetch(`/api/spherex/compare?${params}`, { signal })
+  const response = await fetch(apiUrl(`/api/spherex/compare?${params}`), { signal })
   let body = null
   try {
     body = await response.json()
@@ -47,7 +49,7 @@ export async function fetchSpherexCompare({ fitsUrl1, fitsUrl2, ra, dec, sizeDeg
 }
 
 export async function fetchAstroAiChat({ message, targetId, context, history }, signal) {
-  const response = await fetch('/api/ai/chat', {
+  const response = await fetch(apiUrl('/api/ai/chat'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

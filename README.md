@@ -35,6 +35,12 @@ npm run dev
 
 Open the URL Vite prints, usually `http://localhost:5173`. Vite proxies `/api` to the API on port 8000. On macOS or Linux, use `backend/.venv/bin/python` and `backend/.venv/bin/uvicorn` instead of the `Scripts` paths.
 
+## Deploy the frontend and API
+
+The frontend can be deployed to Vercel and the FastAPI backend to Render. In the Vercel project settings, add the environment variable `VITE_API_BASE_URL` with the backend's public Render URL (for example, `https://your-service.onrender.com`, without a trailing slash), then redeploy the frontend. The frontend will send its `/api/...` requests to that backend. Do not put backend API keys in a `VITE_` variable; Vite exposes those values to browsers.
+
+The backend must be running before the frontend can use it. The attached Render log shows startup failing with `ModuleNotFoundError: No module named 'astropy'`; add the missing dependency to the backend's `requirements.txt` and redeploy Render. Also configure the backend's CORS allowlist to include the deployed Vercel domain, then verify the Render service's `/docs` endpoint loads.
+
 ## Other scripts
 
 ```bash

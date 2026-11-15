@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import SkyTimeMachine from './SkyTimeMachine'
+import { apiUrl } from '../lib/apiUrl'
 
 function formatWavelength(min, max) {
   if (min == null || max == null) return 'Not in archive row'
@@ -136,11 +137,11 @@ function FitsImageViewer({ observation, ra, dec, autoLoad = false, mode = 'explo
   const fitsUrl = observation.access_url
   const previewUrl =
     fitsUrl && ra != null && dec != null
-      ? `/api/spherex/preview?fits_url=${encodeURIComponent(fitsUrl)}&ra=${ra}&dec=${dec}&size_deg=0.04`
+      ? apiUrl(`/api/spherex/preview?fits_url=${encodeURIComponent(fitsUrl)}&ra=${ra}&dec=${dec}&size_deg=0.04`)
       : null
   const metaUrl =
     fitsUrl && ra != null && dec != null
-      ? `/api/spherex/preview_meta?fits_url=${encodeURIComponent(fitsUrl)}&ra=${ra}&dec=${dec}&size_deg=0.04`
+      ? apiUrl(`/api/spherex/preview_meta?fits_url=${encodeURIComponent(fitsUrl)}&ra=${ra}&dec=${dec}&size_deg=0.04`)
       : null
 
   useEffect(() => {
