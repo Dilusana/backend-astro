@@ -14,7 +14,7 @@ export async function fetchSpherexObservations({ raDeg, decDeg }, signal) {
   }
   if (!response.ok) {
     const detail = body && typeof body.detail === 'string' ? body.detail : null
-    throw new Error(detail || 'The SPHEREx archive request failed.')
+    throw new Error(detail || `The SPHEREx archive request failed (HTTP ${response.status}).`)
   }
   if (!body || !Array.isArray(body.observations)) {
     throw new Error('The SPHEREx service returned an unreadable payload.')
@@ -70,7 +70,10 @@ export async function fetchAstroAiChat({ message, targetId, context, history }, 
   }
   if (!response.ok) {
     const detail = body && typeof body.detail === 'string' ? body.detail : null
-    throw new Error(detail || 'The Astro AI service is unavailable.')
+    throw new Error(detail || `The Astro AI service is unavailable (HTTP ${response.status}).`)
+  }
+  if (!body || typeof body.text !== 'string' || !body.text.trim()) {
+    throw new Error('The Astro AI service returned an empty response.')
   }
   return body
 }

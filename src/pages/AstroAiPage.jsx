@@ -223,15 +223,16 @@ export default function AstroAiPage({
     } catch (err) {
       if (err.message && err.message.toLowerCase().includes('rate limit')) {
         setErrorNotice('Rate limit reached: Please wait a moment before sending another message to Astro AI.')
+      } else {
+        setErrorNotice('Live Astro AI is unavailable. Showing a limited offline response.')
       }
 
-      // Graceful offline/client fallback
       messageCounterRef.current += 1
       const fallback = generateEducationalResponse(q, selectedObject)
       const aiMsg = {
         id: `ai-${messageCounterRef.current}`,
         sender: 'ai',
-        band: 'SPHEREx Calibration Level 2',
+        band: 'Offline response',
         source: 'Astro AI • Offline Mode',
         text: fallback.text,
         miniCard: fallback.miniCard,
@@ -823,39 +824,14 @@ function generateEducationalResponse(query, target) {
     }
   }
 
-  // 8. General Astronomy query (when query does NOT explicitly mention the star)
-  if (!q.includes(name.toLowerCase()) && !q.includes('this star') && !q.includes('this object') && !q.includes('this target')) {
-    return {
-      text: "That's a wonderful question about our cosmos! In observational astronomy, telescopes like NASA's SPHEREx survey the entire sky across 102 individual infrared wavelength channels to explore cosmic inflation, the origins of water in planetary nurseries, and the collective light from ancient galaxies.",
-      suggestions: [
-        { label: 'Explore the Night Sky', action: 'explore' },
-        { label: 'Learn Space Discoveries', action: 'learn' },
-      ],
-      followUpQuestions: [
-        'What is SPHEREx?',
-        'Why does space change over time?',
-        'Can you quiz me about astronomy?',
-      ],
-    }
-  }
-
-  // 9. Target-Specific Inquiry (when user explicitly references the target)
   return {
-    text: `Fascinating observation! In observational astrophysics, ${name} offers crucial data on stellar evolution and interstellar chemistry. NASA's SPHEREx all-sky survey maps this coordinate in 102 individual infrared wavelength channels to measure spectral signatures of water ice, carbon monoxide, and cosmic dust.`,
-    miniCard: {
-      title: target?.designation || name,
-      subtitle: `Target: ${name}`,
-      imageUrl: target?.imageUrl || 'https://images-assets.nasa.gov/image/PIA23646/PIA23646~thumb.jpg',
-      metricLabel: 'SURVEY STATUS',
-      metricValue: 'Calibrated',
-    },
+    text: "I don't have a reliable offline answer for that question. I'm best at astronomy and SPHEREx topics; please try again when the live Astro AI service is available.",
     suggestions: [
       { label: 'Show in Sky Explorer', action: 'explore' },
-      { label: 'Compare observations over time', action: 'timemachine' },
+      { label: 'Learn Space Discoveries', action: 'learn' },
     ],
     followUpQuestions: [
-      'What are the 102 spectral bands of SPHEREx?',
-      'Why does space change over time?',
+      'What is SPHEREx?',
     ],
   }
 }
