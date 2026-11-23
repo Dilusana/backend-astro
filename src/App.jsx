@@ -48,7 +48,7 @@ export default function App() {
 
   // Real NASA IRSA SPHEREx data pipeline query whenever target changes
   useEffect(() => {
-    if (!selected) return
+    if (!selected || currentPage !== 'explore') return
 
     const position = catalogPositionToDegrees(selected)
     const objectId = selected.id
@@ -86,7 +86,7 @@ export default function App() {
       })
 
     return () => controller.abort()
-  }, [selected, retryCount])
+  }, [currentPage, selected, retryCount])
 
   function handleSelectTarget(targetId) {
     setSelectedId(targetId)
